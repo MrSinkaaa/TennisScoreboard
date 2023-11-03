@@ -1,0 +1,37 @@
+body {
+    background-image: url('images');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container {
+    width: 70%;
+    background: black;
+}
+
+.header {
+    width: 100%;
+    color: white;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.header h2 {
+    font-size: 30px;
+}
+
+.buttons {
+    width: 100%;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 15px auto;
+}
+
+.buttons button {
+    font-size: 20px;
+    width: 30%;
+}
