@@ -1,5 +1,7 @@
 package ru.mrsinkaaa.repository;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Transaction;
 import ru.mrsinkaaa.entity.Player;
 import org.hibernate.Session;
 import ru.mrsinkaaa.service.HibernateUtil;
@@ -11,79 +13,77 @@ public class PlayerRepository implements CrudRepository<Player> {
 
     @Override
     public Player findById(int id) {
-        Player player = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-
-            player = session.get(Player.class, id);
-
-            session.getTransaction().commit();
+            return session.get(Player.class, id);
         }
-
-        return player;
     }
 
     public Player findByName(String name) {
-        Player player = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-
-            player = session.createQuery("from Player where name = :name", Player.class)
-                  .setParameter("name", name)
-                  .getSingleResult();
-
-            session.getTransaction().commit();
+            return session.createQuery("from Player where name = :name", Player.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
         }
-
-        return player;
     }
 
     @Override
     public List<Player> findAll() {
-        List<Player> players = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-
-            players = session.createQuery("from Player", Player.class).getResultList();
-
-            session.getTransaction().commit();
+            return session.createQuery("from Player", Player.class).getResultList();
         }
-
-        return players;
     }
 
     @Override
     public Player update(Player entity) {
-        Player player = null;
+        Transaction tx = null;
+
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
 
-            player = session.merge(entity);
+            tx = session.beginTransaction();
+            session.merge(entity);
+            tx.commit();
 
-            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if(tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            System.err.println("Error updating player: " + e.getMessage());
         }
-        return player;
+        return entity;
     }
 
     @Override
     public void save(Player entity) {
+        Transaction tx = null;
+
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
 
+            tx = session.beginTransaction();
             session.persist(entity);
-
-            session.getTransaction().commit();
+            tx.commit();
+        } catch (RuntimeException e) {
+            if(tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            System.err.println("Error saving player: " + e.getMessage());
         }
     }
 
     @Override
     public void delete(Player entity) {
+        Transaction tx = null;
+
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
 
+            tx = session.beginTransaction();
             session.remove(entity);
+            tx.commit();
 
-            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if(tx!= null && tx.isActive()) {
+                tx.rollback();
+            }
+            System.err.println("Error deleting player: " + e.getMessage());
         }
     }
 }

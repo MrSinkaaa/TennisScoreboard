@@ -1,70 +1,79 @@
 package ru.mrsinkaaa.repository;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import ru.mrsinkaaa.entity.Match;
 import ru.mrsinkaaa.service.HibernateUtil;
 
 import java.util.List;
 
 public class MatchRepository implements CrudRepository<Match>{
+
     @Override
     public Match findById(int id) {
-        Match match = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-
-            match = session.get(Match.class, id);
-
-            session.getTransaction().commit();
+            return session.get(Match.class, id);
         }
-        return match;
     }
 
     @Override
     public List<Match> findAll() {
-        List<Match> matches = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-
-            matches = session.createQuery("from Match", Match.class).getResultList();
-
-            session.getTransaction().commit();
+            return session.createQuery("from Match", Match.class).getResultList();
         }
-        return matches;
     }
 
     @Override
     public Match update(Match entity) {
-        Match match = null;
+        Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
 
-            match = session.merge(entity);
+            tx = session.beginTransaction();
+            session.merge(entity);
+            tx.commit();
 
-            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (tx!= null && tx.isActive()) {
+                tx.rollback();
+            }
+            System.err.println("Error updating player: " + e.getMessage());
         }
-        return match;
+        return entity;
     }
 
     @Override
     public void save(Match entity) {
+        Transaction tx = null;
+
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
 
+            tx = session.beginTransaction();
             session.persist(entity);
+            tx.commit();
 
-            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (tx!= null && tx.isActive()) {
+                tx.rollback();
+            }
+            System.err.println("Error saving player: " + e.getMessage());
         }
     }
 
     @Override
     public void delete(Match entity) {
+        Transaction tx = null;
+
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
 
+            tx = session.beginTransaction();
             session.remove(entity);
+            tx.commit();
 
-            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (tx!= null && tx.isActive()) {
+                tx.rollback();
+            }
+            System.err.println("Error deleting player: " + e.getMessage());
         }
     }
 }
