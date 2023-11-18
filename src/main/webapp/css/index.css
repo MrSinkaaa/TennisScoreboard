@@ -1,5 +1,6 @@
 body {
-    background-image: url('images');
+    background-size: cover;
+    background: url('https://images5.alphacoders.com/816/816149.jpg') no-repeat center;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -7,13 +8,14 @@ body {
 }
 
 .container {
-    width: 70%;
-    background: black;
+    width: 50%;
+    background: antiquewhite;
+    border-radius: 10px;
+    border: 2px solid green;
 }
 
 .header {
     width: 100%;
-    color: white;
     text-align: center;
     padding: 0 10px;
 }
@@ -27,11 +29,50 @@ body {
     height: 30%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     margin: 15px auto;
 }
 
 .buttons button {
     font-size: 20px;
     width: 30%;
+    height: 20%;
 }
+
+form {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 15px auto;
+}
+
+.score-table {
+    width: 95%;
+    margin: 15px auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-collapse: collapse;
+    border: 2px solid green;
+}
+
+.player-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 5px auto;
+}
+
+.sets {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 5px auto;
+    list-style: none;
+}
+
+
+
+

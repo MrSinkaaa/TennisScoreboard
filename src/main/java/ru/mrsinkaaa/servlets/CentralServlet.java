@@ -1,7 +1,9 @@
 package ru.mrsinkaaa.servlets;
 
+import ru.mrsinkaaa.dto.MatchDTO;
 import ru.mrsinkaaa.servlets.plugins.CreateMatchPlugin;
 import ru.mrsinkaaa.servlets.plugins.IndexPlugin;
+import ru.mrsinkaaa.servlets.plugins.MatchScorePlugin;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,18 +12,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
-@WebServlet(urlPatterns = "/")
+@WebServlet(urlPatterns = "/index/*")
 public class CentralServlet extends HttpServlet {
 
     private final List<ServletPlugin> plugins = new ArrayList<>();
+    public static final HashMap<UUID, MatchDTO> matches = new HashMap<>();
 
     @Override
     public void init() {
 
         plugins.add(new IndexPlugin());
         plugins.add(new CreateMatchPlugin());
+        plugins.add(new MatchScorePlugin());
     }
 
     @Override

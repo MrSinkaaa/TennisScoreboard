@@ -28,12 +28,8 @@ public class Match {
     @JoinColumn(name = "winner", referencedColumnName = "id")
     private Player winner;
 
-    @Transient
-    private Score score;
-
-    public Match(Player p1, Player p2, Score score) {
+    public Match(Player p1, Player p2) {
         this.player1 = p1;
         this.player2 = p2;
-        this.score = score;
     }
 }

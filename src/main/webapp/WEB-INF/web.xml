@@ -3,5 +3,34 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>Tennis Scoreboard</display-name>
+
+  <servlet>
+    <servlet-name>IndexPlugin</servlet-name>
+    <servlet-class>ru.mrsinkaaa.servlets.CentralServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CreateMatchPlugin</servlet-name>
+    <servlet-class>ru.mrsinkaaa.servlets.CentralServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>MatchScorePlugin</servlet-name>
+    <servlet-class>ru.mrsinkaaa.servlets.CentralServlet</servlet-class>
+  </servlet>
+
+
+  <servlet-mapping>
+    <servlet-name>IndexPlugin</servlet-name>
+    <url-pattern>/index</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CreateMatchPlugin</servlet-name>
+    <url-pattern>/new-match</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>MatchScorePlugin</servlet-name>
+    <url-pattern>/match-score</url-pattern>
+  </servlet-mapping>
+
+
 </web-app>

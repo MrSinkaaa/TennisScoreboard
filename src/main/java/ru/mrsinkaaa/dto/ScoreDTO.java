@@ -1,4 +1,4 @@
-package ru.mrsinkaaa.entity;
+package ru.mrsinkaaa.dto;
 
 
 import lombok.AllArgsConstructor;
@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Score {
+public class ScoreDTO {
 
     private int player1Score;
     private int player2Score;
-
 }
