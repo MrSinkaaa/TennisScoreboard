@@ -1,18 +1,19 @@
 package ru.mrsinkaaa.repository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface CrudRepository<T> {
+public interface CrudRepository<K, T> {
 
-    T findById(int id);
+    Optional<T> findById(K id);
 
     List<T> findAll();
 
-    T update(T entity);
+    void update(T entity);
 
-    void save(T entity);
+    T save(T entity);
 
-    void delete(T entity);
+    boolean delete(T entity);
 
 
 }

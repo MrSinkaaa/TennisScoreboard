@@ -6,13 +6,18 @@ import ru.mrsinkaaa.entity.Match;
 import ru.mrsinkaaa.service.HibernateUtil;
 
 import java.util.List;
+import java.util.Optional;
 
-public class MatchRepository implements CrudRepository<Match>{
+public class MatchRepository implements CrudRepository<Integer, Match>{
+
+    private static final MatchRepository INSTANCE = new MatchRepository();
+
+    private MatchRepository() {}
 
     @Override
-    public Match findById(int id) {
+    public Optional<Match> findById(Integer id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Match.class, id);
+            return Optional.ofNullable(session.get(Match.class, id));
         }
     }
 
@@ -24,7 +29,7 @@ public class MatchRepository implements CrudRepository<Match>{
     }
 
     @Override
-    public Match update(Match entity) {
+    public void update(Match entity) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
@@ -38,11 +43,10 @@ public class MatchRepository implements CrudRepository<Match>{
             }
             System.err.println("Error updating player: " + e.getMessage());
         }
-        return entity;
     }
 
     @Override
-    public void save(Match entity) {
+    public Match save(Match entity) {
         Transaction tx = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -57,10 +61,11 @@ public class MatchRepository implements CrudRepository<Match>{
             }
             System.err.println("Error saving player: " + e.getMessage());
         }
+        return entity;
     }
 
     @Override
-    public void delete(Match entity) {
+    public boolean delete(Match entity) {
         Transaction tx = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -69,11 +74,17 @@ public class MatchRepository implements CrudRepository<Match>{
             session.remove(entity);
             tx.commit();
 
+            return true;
         } catch (RuntimeException e) {
             if (tx!= null && tx.isActive()) {
                 tx.rollback();
             }
             System.err.println("Error deleting player: " + e.getMessage());
         }
+        return false;
+    }
+
+    public static MatchRepository getInstance() {
+        return INSTANCE;
     }
 }

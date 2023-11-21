@@ -26,5 +26,7 @@ public class MatchScorePlugin implements ServletPlugin {
         MatchDTO match = matches.get(uuid);
 
         response.sendRedirect("/match-score.jsp?uuid=" + uuid);
+
+
     }
 }

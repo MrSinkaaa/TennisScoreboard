@@ -1,7 +1,6 @@
 package ru.mrsinkaaa.service;
 
 import ru.mrsinkaaa.dto.PlayerDTO;
-import ru.mrsinkaaa.dto.ScoreDTO;
 
 
 public class TennisMatchServiceImpl implements TennisMatchService {
@@ -35,8 +34,5 @@ public class TennisMatchServiceImpl implements TennisMatchService {
         }
     }
 
-    @Override
-    public ScoreDTO score() {
-        return new ScoreDTO(player1.getCurrentScore(), player2.getCurrentScore());
-    }
+
 }

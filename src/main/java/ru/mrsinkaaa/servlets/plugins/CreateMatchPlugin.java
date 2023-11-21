@@ -2,8 +2,12 @@ package ru.mrsinkaaa.servlets.plugins;
 
 
 import jakarta.persistence.NoResultException;
+import ru.mrsinkaaa.dto.MatchDTO;
+import ru.mrsinkaaa.dto.PlayerDTO;
 import ru.mrsinkaaa.entity.Player;
+import ru.mrsinkaaa.exceptions.player.PlayerNotFoundException;
 import ru.mrsinkaaa.repository.PlayerRepository;
+import ru.mrsinkaaa.service.PlayerService;
 import ru.mrsinkaaa.servlets.ServletPlugin;
 
 import javax.servlet.ServletException;
@@ -16,7 +20,7 @@ import static ru.mrsinkaaa.servlets.CentralServlet.matches;
 
 public class CreateMatchPlugin implements ServletPlugin {
 
-    private final PlayerRepository playerRepository = new PlayerRepository();
+    private final PlayerService playerService = PlayerService.getInstance();
 
 
     @Override
@@ -29,29 +33,35 @@ public class CreateMatchPlugin implements ServletPlugin {
         String playerName1 = request.getParameter("player1");
         String playerName2 = request.getParameter("player2");
 
-        Player p1;
-        Player p2;
+        PlayerDTO p1;
+        PlayerDTO p2;
         try {
-            p1 = playerRepository.findByName(playerName1);
+            p1 = playerService.findByName(playerName1);
 
-        } catch (NoResultException e) {
-                p1 = new Player(playerName1);
-                playerRepository.save(p1);
+        } catch (PlayerNotFoundException e) {
+                p1 = PlayerDTO.builder()
+                        .name(playerName1)
+                        .build();
+
+//            playerService.save(p1);
         }
 
         try {
-            p2 = playerRepository.findByName(playerName2);
-        } catch (NoResultException e) {
-            p2 = new Player(playerName2);
-            playerRepository.save(p2);
+            p2 = playerService.findByName(playerName2);
+        } catch (PlayerNotFoundException e) {
+            p2 = PlayerDTO.builder()
+                            .name(playerName2)
+                            .build();
+
+//            playerService.save(p2);
         }
 
 
 
-//        MatchDTO match = new MatchDTO(p1.getId(), p2.getId(), new ScoreDTO(0, 0));
+        MatchDTO match = new MatchDTO(p1, p2);
 
         UUID uuid = UUID.randomUUID();
-//        matches.put(uuid, match);
+        matches.put(uuid, match);
 
         response.sendRedirect("/match-score?uuid=" + uuid);
     }

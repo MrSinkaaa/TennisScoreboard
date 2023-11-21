@@ -2,6 +2,7 @@ package ru.mrsinkaaa.dto;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,11 +12,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PlayerDTO {
 
     private int id;
     private String name;
     private int currentScore;
+    private int currentSetScore;
     private List<Integer> setScores;
     private boolean isServing;
 
