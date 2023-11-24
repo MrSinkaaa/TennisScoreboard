@@ -38,31 +38,27 @@ public class CreateMatchPlugin implements ServletPlugin {
         try {
             p1 = playerService.findByName(playerName1);
 
-        } catch (PlayerNotFoundException e) {
+        } catch (NoResultException e) {
                 p1 = PlayerDTO.builder()
                         .name(playerName1)
                         .build();
-
-//            playerService.save(p1);
         }
 
         try {
             p2 = playerService.findByName(playerName2);
-        } catch (PlayerNotFoundException e) {
+        } catch (NoResultException e) {
             p2 = PlayerDTO.builder()
                             .name(playerName2)
                             .build();
-
-//            playerService.save(p2);
         }
-
-
 
         MatchDTO match = new MatchDTO(p1, p2);
 
         UUID uuid = UUID.randomUUID();
         matches.put(uuid, match);
+        request.setAttribute("match", match);
 
-        response.sendRedirect("/match-score?uuid=" + uuid);
+        request.getRequestDispatcher("/match-score.jsp?uuid=" + uuid)
+                .forward(request, response);
     }
 }
